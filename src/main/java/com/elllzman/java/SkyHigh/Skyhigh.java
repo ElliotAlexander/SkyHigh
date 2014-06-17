@@ -23,7 +23,7 @@ public final class Skyhigh extends JavaPlugin {
         scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
             @Override
             public void run() {
-                if (getEnabled() == true) {
+                if (getEnabled()) {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Location loc = p.getLocation();
                         int y = (int) loc.getY();
@@ -56,31 +56,31 @@ public final class Skyhigh extends JavaPlugin {
 
             }
 
-            if(args[0].toString().equalsIgnoreCase("help"))
+            if(args[0].equalsIgnoreCase("help"))
             {
                 skyHighHelp((Player)sender);
             }
 
-            if(args[0].toString().equalsIgnoreCase("enable")||args[0].toString().equalsIgnoreCase("on"))
+            if(args[0].equalsIgnoreCase("enable")||args[0].equalsIgnoreCase("on"))
             {
                 if(sender.isOp()||sender.hasPermission("SkyHigh.Admin")||getEnabled()==false)
                 {
                     isEnabled = true;
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been enabled!");
                 }
-                else if(getEnabled()==true){ sender.sendMessage(ChatColor.RED + "Skyhigh already enabled"); return true; }
+                else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already enabled"); return true; }
                 else;  sender.sendMessage(ChatColor.RED + "No Permission"); return true;
 
             }
-            if(args[0].toString().equalsIgnoreCase("disable")||args[0].toString().equalsIgnoreCase("off"))
+            if(args[0].equalsIgnoreCase("disable")||args[0].equalsIgnoreCase("off"))
             {
-                if(sender.isOp()||sender.hasPermission("SkyHigh.Admin")||getEnabled()==true)
+                if(sender.isOp()||sender.hasPermission("SkyHigh.Admin")||getEnabled())
                 {
                     isEnabled = false;
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been disabled! The ground is safe, for now...");
                 }
-                else if(getEnabled()==true){ sender.sendMessage(ChatColor.RED + "Skyhigh already disabled"); return true; }
-                else;  sender.sendMessage(ChatColor.RED + "No Permission"); return true;
+                else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already disabled"); return true; }
+                else;  { sender.sendMessage(ChatColor.RED + "No Permission"); return true; }
 
             }
 
