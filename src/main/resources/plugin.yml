@@ -1,8 +1,6 @@
 name: SkyHigh
-main: com.elllzman.java.SkyHigh.Skyhigh
 version: 1.0
-author: Elllzman619
+main: com.elllzman.java.SkyHigh.Skyhigh
 commands:
-  SkyHigh:
+  skyhigh:
     usage: /<command> help/on/off/enable/disable
-    description: Ultrahardcore plugin for the gamemode SkyHigh

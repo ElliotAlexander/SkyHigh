@@ -7,22 +7,49 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
-/**
- * Created by Elliot on 16/06/2014.
- */
+
+
 public final class Skyhigh extends JavaPlugin {
 
-    private static boolean isEnabled = true;
+
+    public static int taskId;
+    private static boolean isEnabled = false;
+    public static Plugin plugin;
 
     public void onEnable()
     {
-        BukkitScheduler scheduler = Bukkit.getServer().getScheduler();
-        scheduler.scheduleSyncRepeatingTask(this, new Runnable() {
-            @Override
-            public void run() {
+
+       plugin = this;
+    }
+
+
+    public static Plugin getPluginInstance()
+    {
+        return plugin;
+    }
+
+
+
+    private static boolean getEnabled()
+    {
+       return isEnabled;
+    }
+
+    public static int getTaskId()
+    {
+        return taskId;
+    }
+
+    public void startTask()
+    {
+       taskId = getPluginInstance().getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+        {
+            public void run()
+            {
                 if (getEnabled()) {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Location loc = p.getLocation();
@@ -38,11 +65,12 @@ public final class Skyhigh extends JavaPlugin {
         },0L, 600L);
     }
 
-
-    private static boolean getEnabled()
+    public void stopTask()
     {
-       return isEnabled;
+        Bukkit.getScheduler().cancelTask(getTaskId());
     }
+
+
 
 
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args)
@@ -66,6 +94,7 @@ public final class Skyhigh extends JavaPlugin {
                 if(sender.isOp()||sender.hasPermission("SkyHigh.Admin")||getEnabled()==false)
                 {
                     isEnabled = true;
+                    startTask();
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been enabled!");
                 }
                 else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already enabled"); return true; }
