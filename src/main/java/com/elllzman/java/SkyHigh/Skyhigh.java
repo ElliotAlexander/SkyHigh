@@ -70,7 +70,7 @@ public final class Skyhigh extends JavaPlugin {
                     }
                 }
             }
-        },0L, ticksBetweenDamage);
+        },600L, ticksBetweenDamage);
     }
 
     public void stopTask()
