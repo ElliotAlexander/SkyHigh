@@ -16,15 +16,23 @@ import org.bukkit.scheduler.BukkitScheduler;
 public final class Skyhigh extends JavaPlugin {
 
 
+    public static int ticksBetweenDamage;
+    public static int damageAmount;
+
     public static int taskId;
     private static boolean isEnabled = false;
     public static Plugin plugin;
 
     public void onEnable()
     {
-
-       plugin = this;
+        getLogger().info("Skyhigh has been invoked.");
+        plugin = this;
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+        ticksBetweenDamage = getConfig().getInt("Ticks between damage");
+        damageAmount = getConfig().getInt("Damage amount");
     }
+
 
 
     public static Plugin getPluginInstance()
@@ -57,12 +65,12 @@ public final class Skyhigh extends JavaPlugin {
                         if (y > 100 && p.getGameMode() == GameMode.SURVIVAL) {
                             p.sendMessage("§9[SkyHigh] §bWarnings were spoken...");
                             double oldHealth = p.getHealth();
-                            p.setHealth(oldHealth - 1);
+                            p.setHealth(oldHealth - damageAmount);
                         }
                     }
                 }
             }
-        },0L, 600L);
+        },0L, ticksBetweenDamage);
     }
 
     public void stopTask()
@@ -91,14 +99,14 @@ public final class Skyhigh extends JavaPlugin {
 
             if(args[0].equalsIgnoreCase("enable")||args[0].equalsIgnoreCase("on"))
             {
-                if(sender.isOp()||sender.hasPermission("SkyHigh.Admin")||getEnabled()==false)
+                if(sender.isOp()||sender.hasPermission("SkyHigh.Admin")||getEnabled())
                 {
                     isEnabled = true;
                     startTask();
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been enabled!");
                 }
                 else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already enabled"); return true; }
-                else;  sender.sendMessage(ChatColor.RED + "No Permission"); return true;
+
 
             }
             if(args[0].equalsIgnoreCase("disable")||args[0].equalsIgnoreCase("off"))
@@ -106,10 +114,11 @@ public final class Skyhigh extends JavaPlugin {
                 if(sender.isOp()||sender.hasPermission("SkyHigh.Admin")||getEnabled())
                 {
                     isEnabled = false;
+                    stopTask();
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been disabled! The ground is safe, for now...");
                 }
                 else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already disabled"); return true; }
-                else;  { sender.sendMessage(ChatColor.RED + "No Permission"); return true; }
+
 
             }
 
@@ -121,10 +130,8 @@ public final class Skyhigh extends JavaPlugin {
     public void skyHighHelp(Player p)
     {
         p.sendMessage("§b--------------------- §9[SkyHigh]§b ---------------------");
-        p.sendMessage("§bAfter 45 minutes, any player below Y-101 will begin to take half a heart of damage every 30 seconds.");
-        p.sendMessage(" ");
-        p.sendMessage("§bYou must use this 45 minutes wisely to make preparations for surviving the remainder of the game in the sky.");
-        p.sendMessage(" ");
+        p.sendMessage("§bAfter 45 minutes, any player below Y-101 will begin to take half a heart of damage every 30 seconds.\n ");
+        p.sendMessage("§bYou must use this 45 minutes wisely to make preparations for surviving the remainder of the game in the.\n ");
         p.sendMessage("§bHint: Cobblestone and snow generators will be very important.");
         p.sendMessage("§bBe sure your tower is close to 0,0 to reach the sky meetup in reasonable time and have encounters with other teams.\n ");
         p.sendMessage("§bYou will be forced to head to meetup by means of ground travel if necessary, another reason why having a way to generate blocks and build bridges is important.\n");
