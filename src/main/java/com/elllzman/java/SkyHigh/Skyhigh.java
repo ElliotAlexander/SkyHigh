@@ -105,7 +105,10 @@ public final class Skyhigh extends JavaPlugin {
                     startTask();
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been enabled!");
                 }
-                else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already enabled"); return true; }
+                else if(getEnabled()){
+                    sender.sendMessage(ChatColor.RED + "Skyhigh already enabled");
+                    return true;
+                }
 
 
             }
@@ -118,8 +121,6 @@ public final class Skyhigh extends JavaPlugin {
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been disabled! The ground is safe, for now...");
                 }
                 else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already disabled"); return true; }
-
-
             }
 
         }
