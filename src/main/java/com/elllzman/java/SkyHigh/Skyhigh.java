@@ -1,9 +1,6 @@
 package com.elllzman.java.SkyHigh;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -11,6 +8,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
+import java.util.ArrayList;
+import java.util.List;
 
 
 public final class Skyhigh extends JavaPlugin {
@@ -29,11 +28,18 @@ public final class Skyhigh extends JavaPlugin {
         plugin = this;
         getConfig().options().copyDefaults(true);
         saveConfig();
-        ticksBetweenDamage = getConfig().getInt("Ticks between damage");
-        damageAmount = getConfig().getInt("Damage amount");
+
     }
 
 
+
+    public void loadConfig()
+    {
+        ticksBetweenDamage = getConfig().getInt("Ticks between damage");
+        damageAmount = getConfig().getInt("Damage amount");
+
+
+    }
 
     public static Plugin getPluginInstance()
     {
@@ -41,6 +47,20 @@ public final class Skyhigh extends JavaPlugin {
     }
 
 
+    public List getExcludedWorlds()
+    {
+        List<World> excludedWorlds = new ArrayList<World>();
+        for(String worldName : plugin.getConfig().getStringList("Excluded Worlds")) {
+            for(World w : getServer().getWorlds()) {
+                if(w.getName().equalsIgnoreCase(worldName))
+                {
+                    excludedWorlds.add(Bukkit.getServer().getWorld(worldName));
+
+                }
+            }
+        }
+        return excludedWorlds;
+    }
 
     private static boolean getEnabled()
     {
@@ -62,7 +82,7 @@ public final class Skyhigh extends JavaPlugin {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Location loc = p.getLocation();
                         int y = (int) loc.getY();
-                        if (y < 100 && p.getGameMode() == GameMode.SURVIVAL) {
+                    if (y < 100 && p.getGameMode() == GameMode.SURVIVAL && loc.getWorld() != getExcludedWorlds()  ) {
                             p.sendMessage("§9[SkyHigh] §bWarnings were spoken...");
                             double oldHealth = p.getHealth();
                             p.setHealth(oldHealth - damageAmount);
@@ -120,7 +140,10 @@ public final class Skyhigh extends JavaPlugin {
                     stopTask();
                     Bukkit.getServer().broadcastMessage("§9[SkyHigh] §bSkyhigh has been disabled! The ground is safe, for now...");
                 }
-                else if(getEnabled()){ sender.sendMessage(ChatColor.RED + "Skyhigh already disabled"); return true; }
+                else if(getEnabled()){
+                    sender.sendMessage(ChatColor.RED + "Skyhigh already disabled");
+                    return true;
+                }
             }
 
         }
