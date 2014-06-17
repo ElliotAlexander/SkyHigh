@@ -62,7 +62,7 @@ public final class Skyhigh extends JavaPlugin {
                     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
                         Location loc = p.getLocation();
                         int y = (int) loc.getY();
-                        if (y > 100 && p.getGameMode() == GameMode.SURVIVAL) {
+                        if (y < 100 && p.getGameMode() == GameMode.SURVIVAL) {
                             p.sendMessage("§9[SkyHigh] §bWarnings were spoken...");
                             double oldHealth = p.getHealth();
                             p.setHealth(oldHealth - damageAmount);
