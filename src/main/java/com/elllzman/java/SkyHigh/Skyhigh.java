@@ -55,7 +55,6 @@ public final class Skyhigh extends JavaPlugin {
                 if(w.getName().equalsIgnoreCase(worldName))
                 {
                     excludedWorlds.add(Bukkit.getServer().getWorld(worldName));
-
                 }
             }
         }
